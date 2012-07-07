@@ -6,10 +6,10 @@ module Zlog
   # @@pattern_debug   = "dd %s"
   # @@pattern_ok      = "++ %s"
 
-  @@pattern_info    = "\033[37m-- %s\033[0m"
+  @@pattern_info    = "\033[0m-- %s\033[0m"
   @@pattern_error   = "\033[31mee %s\033[0m"
   @@pattern_warning = "\033[33mww %s\033[0m"
-  @@pattern_debug   = "\033[1;30mdd %s\033[0m"
+  @@pattern_debug   = "\033[37mdd %s\033[0m"
   @@pattern_ok      = "\033[32m++ %s\033[0m"
 
   # @@pattern_info    = "-- %s"
