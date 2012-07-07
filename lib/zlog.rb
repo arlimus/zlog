@@ -1,12 +1,13 @@
 
 module Zlog
 
-  STDOUT_PATTERN_NOCOLOR = {
+  STDOUT_PATTERN_NOCOLORS = {
     :info     => "-- %s",
     :error    => "ee %s",
     :warning  => "ww %s",
     :debug    => ".. %s",
-    :ok       => "++ %s"
+    :ok       => "++ %s",
+    :section  => "\n== %s"
   }
 
   STDOUT_PATTERN_8COLORS = {
@@ -15,6 +16,7 @@ module Zlog
     :warning => "\033[1;33mww %s\033[0m",
     :debug   => "\033[1;30m.. %s\033[0m",
     :ok      => "\033[1;32m++ %s\033[0m",
+    :section => "\n\033[1;34m== %s\033[0m"
   }
 
   STDOUT_PATTERN_256COLORS = {
@@ -23,6 +25,7 @@ module Zlog
     :warning => "\033[38;5;226mww %s\033[0m",
     :debug   => "\033[38;5;241m.. %s\033[0m",
     :ok      => "\033[38;5;046m++ %s\033[0m",
+    :section => "\n\033[38;5;033m== %s\033[0m"
   }
 
   NOTHING   = 0
@@ -63,8 +66,12 @@ module Zlog
     puts @@pattern[:ok] % msg if @@level >= OK
   end
 
-  def self.initialize_stdout_colors()
-    @@pattern = self.get_stdout_pattern
+  def self.section(msg)
+    puts @@pattern[:section] % msg if @@level >= OK
+  end
+
+  def self.initialize_stdout_colors(colors = nil)
+    @@pattern = self.get_stdout_pattern(colors)
   end
 
 
@@ -86,8 +93,9 @@ module Zlog
     STDOUT_PATTERN_NOCOLORS
   end
 
-  def self.get_stdout_pattern()
-    self.get_pattern_for_colors self.detect_terminal_colors
+  def self.get_stdout_pattern(colors = nil)
+    cc = colors || self.detect_terminal_colors
+    self.get_pattern_for_colors cc
   end
 
   @@pattern = get_stdout_pattern
