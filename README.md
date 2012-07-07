@@ -9,5 +9,4 @@ Very rudimentary but nice logging, focusing on commandline and simplicity. If it
 
 # installation
 
-    gem build zlog.gemspec
-    gem install zlog*.gem
+    gem build *.gemspec && gem install *gem
