@@ -34,7 +34,7 @@ module Zlog
   end
 
   def self.log(msg)
-    self.log(msg)
+    self.info(msg)
   end
 
   def self.info(msg)
