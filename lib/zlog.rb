@@ -42,10 +42,6 @@ module Zlog
     @@level = v
   end
 
-  def self.log(msg)
-    self.info(msg)
-  end
-
   def self.info(msg)
     puts @@pattern[:info] % msg if @@level >= INFO
   end
@@ -64,6 +60,16 @@ module Zlog
 
   def self.ok(msg)
     puts @@pattern[:ok] % msg if @@level >= OK
+  end
+
+  def self.abort(msg)
+    self.error msg
+    exit
+  end
+
+  class << self
+    alias_method :log, :info
+    alias_method :warn, :warning
   end
 
   def self.section(msg)
