@@ -96,11 +96,11 @@ module Zlog
     str = contents # contents.gsub(UNPRINTABLE_CHARACTERS,"")
     s = 0
     l = width - 1
-    m = ANSI_ESCAPE_CHARACTERS.match str[s..l]
-    until m.nil?
+    m = ANSI_ESCAPE_CHARACTERS.match str[s..-1]
+    until m.nil? or m.begin(0) > l
       s += m[0].length + m.begin(0)
       l += m[0].length
-      m = ANSI_ESCAPE_CHARACTERS.match str[s..l]
+      m = ANSI_ESCAPE_CHARACTERS.match str[s..-1]
     end
     "%-#{l}s" % str[0..l]
   end
