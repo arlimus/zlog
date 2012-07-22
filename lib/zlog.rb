@@ -88,20 +88,21 @@ module Zlog
   # the line still contains characters
   # this typically happens in continuous mode
   @@dirty_line = false
-  UNPRINTABLE_CHARACTERS = /(\e\[[^m]*m|[^[:print:]])/
+  ANSI_ESCAPE_CHARACTERS = /\e\[[^m]*m/
 
   # format contents so they fit into a certain width
   # supports escaped characters
   def self.format_line( width, contents )
+    str = contents # contents.gsub(UNPRINTABLE_CHARACTERS,"")
     s = 0
     l = width - 1
-    m = UNPRINTABLE_CHARACTERS.match contents[s..l]
+    m = ANSI_ESCAPE_CHARACTERS.match str[s..l]
     until m.nil?
       s += m[0].length + m.begin(0)
       l += m[0].length
-      m = UNPRINTABLE_CHARACTERS.match contents[s..l]
+      m = ANSI_ESCAPE_CHARACTERS.match str[s..l]
     end
-    "%-#{l}s" % contents[0..l]
+    "%-#{l}s" % str[0..l]
   end
 
   # format a message correctly in a continuous environment
