@@ -97,12 +97,13 @@ module Zlog
     s = 0
     l = width - 1
     m = ANSI_ESCAPE_CHARACTERS.match str[s..-1]
-    until m.nil? or m.begin(0) > l
+    until m.nil? or (s+m.begin(0)) > l
       s += m[0].length + m.begin(0)
       l += m[0].length
       m = ANSI_ESCAPE_CHARACTERS.match str[s..-1]
     end
-    "%-#{l}s" % str[0..l]
+    reset_style = ( s > 0 ) ? "\e[0m" : ""
+    "%-#{l}s%s" % [str[0..l], reset_style]
   end
 
   # format a message correctly in a continuous environment
@@ -114,12 +115,12 @@ module Zlog
     w = HighLine::SystemExtensions.terminal_size[0]
 
     if not continuous
-      m = ( @@dirty_line ) ? "%#{w-1}s\r%s\n" % ["",msg] : msg+"\n"
+      m = ( @@dirty_line ) ? "%#{w}s\r%s\n" % ["",msg] : msg+"\n"
       @@dirty_line = false
       m
     else
       @@dirty_line = true
-      "%s\r" % format_line( w - 1 , msg )
+      format_line( w , msg ) + "\r"
     end
   end
 
