@@ -31,6 +31,7 @@ See the `example` folder and run what's inside. Example output:
 # info
 
 Log-levels: `NOTHING`, `ERROR`, `OK`, `WARNING`, `INFO`, `DEBUG`
+
 Default log-level: `WARNING` (meaning that you won't see messages from `info` by default!)
 
-Commands: `section`, `error`, `ok`, `warning`, `info`, `debug`, `abort` (like error but exits)
+Commands: `section`, `error`, `ok`, `warning`, `info`, `debug`, `abort` (like `error` but exits)
