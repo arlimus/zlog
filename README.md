@@ -25,7 +25,7 @@ Code:
     Zlog.ok "that went nice!"
 
 See the `example` folder and run what's inside.
-![Example image in example/example.output.png](https://github.com/arlimus/zlog/example/example.output.png "Example output")
+![Example image in example/example.output.png](https://raw.github.com/arlimus/zlog/master/example/example.output.png "Example output")
 
 # info
 
