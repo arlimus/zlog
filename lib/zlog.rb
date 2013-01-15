@@ -42,20 +42,20 @@ module Zlog
     @@level = v
   end
 
-  def self.info(msg, continuous = false)
-    write @@pattern[:info] % msg, continuous if @@level >= INFO
-  end
-
   def self.error(msg)
-    write @@pattern[:error] % msg if @@level >= ERROR
+    write @@pattern[:error] % msg, stream: $stderr if @@level >= ERROR
   end
 
   def self.warning(msg)
-    write @@pattern[:warning] % msg if @@level >= WARNING
+    write @@pattern[:warning] % msg, stream: $stderr if @@level >= WARNING
+  end
+
+  def self.info(msg, continuous = false)
+    write @@pattern[:info] % msg, continuous: continuous if @@level >= INFO
   end
 
   def self.debug(msg, continuous = false)
-    write @@pattern[:debug] % msg, continuous if @@level >= DEBUG
+    write @@pattern[:debug] % msg, continuous: continuous if @@level >= DEBUG
   end
 
   def self.ok(msg)
@@ -124,8 +124,9 @@ module Zlog
     end
   end
 
-  def self.write(msg, continuous = false)
-    print format_continuous(msg, continuous)
+  def self.write(msg, opts = {} )
+    o = { continuous: false, stream: $stdout }.merge(opts)
+    o[:stream].print format_continuous(msg, o[:continuous])
   end
 
 
