@@ -37,7 +37,7 @@ module Zlog
   VERBOSE   = 60
   DEBUG     = 100
 
-  @@level   = WARNING
+  @@level   = INFO
   def self.level=( v )
     @@level = v
   end
