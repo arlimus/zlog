@@ -129,16 +129,6 @@ module Zlog
     o[:stream].print format_continuous(msg, o[:continuous])
   end
 
-
-  TERMINALS_WITH_256_COLORS = ["gnome-terminal"]
-
-  def self.detect_terminal_colors()
-    col = `tput colors`.to_i
-    colorterm = ENV["COLORTERM"]
-    return 256 if TERMINALS_WITH_256_COLORS.include?(colorterm)
-    return col
-  end
-
   def self.get_pattern_for_colors(colors)
     return STDOUT_PATTERN_256COLORS if colors >= 256
     return STDOUT_PATTERN_8COLORS if colors >= 8
@@ -146,7 +136,7 @@ module Zlog
   end
 
   def self.get_stdout_pattern(colors = nil)
-    cc = colors || self.detect_terminal_colors
+    cc = colors || 256
     self.get_pattern_for_colors cc
   end
 
