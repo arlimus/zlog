@@ -8,6 +8,7 @@ spec = Gem::Specification.new do |s|
   s.email = "dominik.richter@googlemail.com"
 
   s.add_dependency 'highline'
+  s.add_dependency 'logging'
 
   s.files = `git ls-files`.split("\n")
   s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }

@@ -1,4 +1,5 @@
 require 'highline'
+require 'logging'
 
 module Zlog
 
