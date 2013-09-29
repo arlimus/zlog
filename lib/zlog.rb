@@ -2,30 +2,82 @@ require 'highline'
 require 'logging'
 
 module Zlog
+  def self.init_stdout loglevel = :info
+    Logging.logger.root.add_appenders Logging.appenders.stdout(
+      level: loglevel,
+      :format_as => :yaml,
+      layout: Zlog::Layouts.simple
+      )
+    Logging.logger.root.level = loglevel
+  end
+
+  module Layouts
+    # Accessor / Factory for Simple layout
+    def self.simple( *args )
+      return ::Zlog::Layouts::Simple.new if args.empty?
+      ::Zlog::Layouts::Simple.new(*args)
+    end
+
+    # The +Basic+ layout class provides methods for simple formatting of log
+    # events. The resulting string follows the format below.
+    #
+    # LEVEL LoggerName : log message
+    #
+    # _LEVEL_ is the log level of the event. _LoggerName_ is the name of the
+    # logger that generated the event. <em>log message</em> is the message
+    # or object that was passed to the logger. If multiple message or objects
+    # were passed to the logger then each will be printed on its own line with
+    # the format show above.
+    #
+    class Simple < ::Logging::Layout
+
+      # call-seq:
+      # format( event )
+      #
+      # Returns a string representation of the given logging _event_. See the
+      # class documentation for details about the formatting used.
+      #
+      def format( event )
+        p event
+        p ::Logging::MAX_LEVEL_LENGTH
+        p ::Logging::LNAMES
+        p ::Logging::LNAMES[event.level]
+        obj = format_obj(event.data)
+        sprintf("%*s %s : %s\n", ::Logging::MAX_LEVEL_LENGTH,
+                ::Logging::LNAMES[event.level], event.logger, obj)
+      end
+
+    end # Basic
+  end # Logging::Layouts
+
+  # standard order: ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"]
 
   STDOUT_PATTERN_NOCOLORS = {
-    :info     => "-- %s",
-    :error    => "ee %s",
-    :warning  => "ww %s",
     :debug    => ".. %s",
+    :info     => "-- %s",
+    :warning  => "ww %s",
+    :error    => "ee %s",
+    :fatal    => "ff %s",
     :ok       => "++ %s",
     :section  => "\n== %s"
   }
 
   STDOUT_PATTERN_8COLORS = {
-    :info    => "\033[0m-- %s\033[0m",
-    :error   => "\033[1;31mee %s\033[0m",
-    :warning => "\033[1;33mww %s\033[0m",
     :debug   => "\033[37m.. %s\033[0m",
+    :info    => "\033[0m-- %s\033[0m",
+    :warning => "\033[1;33mww %s\033[0m",
+    :error   => "\033[1;31mee %s\033[0m",
+    :fatal   => "\033[1;41mff %s\033[0m",
     :ok      => "\033[1;32m++ %s\033[0m",
     :section => "\n\033[1;34m== %s\033[0m"
   }
 
   STDOUT_PATTERN_256COLORS = {
-    :info    => "\033[38;5;255m-- %s\033[0m",
-    :error   => "\033[38;5;196mee %s\033[0m",
-    :warning => "\033[38;5;226mww %s\033[0m",
     :debug   => "\033[38;5;246m.. %s\033[0m",
+    :info    => "\033[38;5;255m-- %s\033[0m",
+    :warning => "\033[38;5;226mww %s\033[0m",
+    :error   => "\033[38;5;196mee %s\033[0m",
+    :fatal   => "\033[48;5;196mff %s\033[0m",
     :ok      => "\033[38;5;46m++ %s\033[0m",
     :section => "\n\033[38;5;33m== %s\033[0m"
   }
