@@ -1,6 +1,6 @@
 spec = Gem::Specification.new do |s|
   s.name = 'zlog'
-  s.version = '0.2'
+  s.version = '0.3'
   s.platform = Gem::Platform::RUBY
   s.summary = "rudimentary simple logging for ruby"
   s.description = s.summary
