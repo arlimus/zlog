@@ -6,6 +6,7 @@ spec = Gem::Specification.new do |s|
   s.description = s.summary
   s.author = "Dominik Richter"
   s.email = "dominik.richter@googlemail.com"
+  s.licenses = ["MPLv2"]
 
   s.add_dependency 'highline'
   s.add_dependency 'logging'
