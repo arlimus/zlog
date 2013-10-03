@@ -1,12 +1,17 @@
+lib = File.expand_path('../lib/', __FILE__)
+$:.unshift lib unless $:.include?(lib)
+require 'zlog'
+
 spec = Gem::Specification.new do |s|
   s.name = 'zlog'
-  s.version = '0.3'
+  s.version = Zlog::VERSION
   s.platform = Gem::Platform::RUBY
   s.summary = "rudimentary simple logging for ruby"
   s.description = s.summary
   s.author = "Dominik Richter"
   s.email = "dominik.richter@googlemail.com"
   s.licenses = ["MPLv2"]
+  s.homepage = "https://github.com/arlimus/zlog"
 
   s.add_dependency 'highline'
   s.add_dependency 'logging'
