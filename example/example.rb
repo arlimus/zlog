@@ -1,26 +1,35 @@
-#!/usr/bin/env ruby
+#!/bin/ruby
+require_relative '../lib/zlog'
 
-require "zlog"
+Zlog.init_stdout loglevel: :debug
 
-Zlog::level = Zlog::DEBUG
+logger = Logging.logger["zlog"]
+logger.section "zlog"
+logger.ok "ok me"
+logger.debug "debug me"
+logger.info "info me"
+logger.warn "warn me"
+logger.error "error me"
+logger.fatal "fatal me"
 
-def try_all()
-  ["debug", "log","info","warning","error","ok"].each do |m|
-    Zlog::send m, "call Zlog::#{m}"
-  end
+logger.section "continuous logging"
+(1..50).each do |len|
+  logger.debug( logger.cont "o"*len+"k" )
+  sleep 0.01
 end
+logger.info "back to normal"
 
-Zlog.section("trying defaults")
-try_all()
+logger.section "logging with hierarchies"
+Zlog.init_stdout named: true, loglevel: :debug
+foo = Logging.logger['Foo']
+bar = Logging.logger['Foo::Bar']
+baz = Logging.logger['Foo::Baz']
+foo.debug 'foo will send a warning soon'
+foo.warn 'this is a warning, not a ticket'
+bar.info 'this message will not be logged'
+baz.info 'nor will this message'
+bar.ok 'bar ís ok'
+bar.error 'but this error message will be logged'
 
-Zlog::initialize_stdout_colors(0)
-Zlog.section("set colors to 0")
-try_all()
-
-Zlog::initialize_stdout_colors(16)
-Zlog.section("set colors to 16")
-try_all()
-
-Zlog::initialize_stdout_colors(256)
-Zlog.section("set colors to 256")
-try_all()
+logger.section "show logger configuration"
+Logging.show_configuration
