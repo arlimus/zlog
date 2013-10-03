@@ -16,6 +16,8 @@ module Logging
 end
 
 module Zlog
+  VERSION = "0.3"
+
   def self.init_stdout opts = {named: false, loglevel: nil}
     Logging.logger.root.appenders = Logging.appenders.stdout(
       level: opts[:loglevel],
