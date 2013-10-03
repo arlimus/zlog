@@ -5,8 +5,13 @@ require 'logging'
 # http://stackoverflow.com/questions/2281490/how-to-add-a-custom-log-level-to-logger-in-ruby
 module Logging
   class Logger
-    def ok msg; self.add 5, msg end
-    def section msg; self.add 6, msg end
+    def ok msg;       add 5, msg    end
+    def section msg;  add 6, msg    end
+
+    def cont msg
+      "\r" + msg
+    end
+
   end
 end
 
@@ -36,8 +41,46 @@ module Zlog
         # Logging::LogEvent logger="zlog", level=2, data="warn me", time=2013-09-29 23:36:12 +0200, file="", line="", method=""
         level = LOGLEVEL2NAME[event.level]
         pattern = STDOUT_PATTERN_256COLORS[level]
-        obj = format_obj(event.data)
-        ( pattern % obj ) + "\n"
+        # handle continuous logging lines
+        if (event.data.start_with? "\r")
+          # this is a continuous message
+          # there are 2 cases which need to be covered:
+          # A: the last line was a regular log line,
+          #    the cursor caret is at position 0
+          # B: the last line was a continuous log line,
+          #    the cursor caret is at the end of the last message
+          # For case B we want to go back to the beginning of the line (via "\r")
+          # then insert the message and the amount of white space needed to
+          # overwrite any visible characters from the last message
+          obj = format_obj(event.data[1..-1])
+          msg = pattern % obj
+          # determine the length of the last message
+          len = (@has_last_line_newline) ? 0 : @last.length
+          # calculate the amount of white spaces we need to overwrite
+          # remnants of the last log message
+          rem_len = len - msg.length
+          rem_len = 0 if rem_len < 0
+          # create the resulting string
+          ret = "\r" + msg + (' '*rem_len)
+          # make sure to update state parameters
+          @last = msg
+          @has_last_line_newline = false
+          # return the result
+          ret
+        else
+          # format the object
+          obj = format_obj(event.data)
+          # check if we need to add a newline at the start of the line
+          # this only happens when the last message was a continuous message
+          # and thus didn't set a \n at the end
+          sl = if (@has_last_line_newline); ""
+               else
+                 @has_last_line_newline = true
+                 "\n"
+               end
+          # return the resulting pattern
+          sl + (pattern % obj ) + "\n"
+        end
       end
     end
 
