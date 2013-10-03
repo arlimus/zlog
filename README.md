@@ -1,16 +1,16 @@
 # zlog
 
-Very rudimentary but nice logging, focusing on commandline and simplicity.
+Logging configuration on top of ruby's `logging` gem (see [github](https://github.com/TwP/logging)).
 
-* supports continuous logging (eg have progress-bar in commandline)
-* detect commandline colors
-
-If it's too simple, use any of the regular ruby loggers instead!
+* colorful default logging to stdout
+* supports continuous logging (eg progress indicators which you don't want to clutter your commandline)
+* added section and ok log types
 
 # requirements
 
-* ruby and gems
-* 256-color terminal ;)
+* gems:
+  * logging
+  * highline
 
 # installation
 
@@ -21,17 +21,18 @@ If it's too simple, use any of the regular ruby loggers instead!
 Code:
 
     require "zlog"
-    Zlog.error "that didn't work"
-    Zlog.ok "that went nice!"
+    Zlog.init_stdout loglevel: :debug
 
-See the `example` folder and run what's inside. Example output:
+    l = Logging.logger["main"]
+    l.section "log demonstration"
+    l.ok "ok me"
+    l.debug "debug me"
+    l.info "info me"
+    l.warn "warn me"
+    l.error "error me"
+    l.fatal "fatal me"
+
+
+See the `example` folder for more.
 
 ![Example image in example/example.output.png](https://raw.github.com/arlimus/zlog/master/example/example.output.png)
-
-# info
-
-Log-levels: `NOTHING`, `ERROR`, `OK`, `WARNING`, `INFO`, `DEBUG`
-
-Default log-level: `WARNING` (meaning that you won't see messages from `info` by default!)
-
-Commands: `section`, `error`, `ok`, `warning`, `info`, `debug`, `abort` (like `error` but exits)
