@@ -36,6 +36,7 @@ module Zlog
 
     # Simple layout for easy readability
     class Simple < ::Logging::Layout
+
       # format log events
       def format( event )
         # Logging::LogEvent logger="zlog", level=2, data="warn me", time=2013-09-29 23:36:12 +0200, file="", line="", method=""
@@ -55,7 +56,7 @@ module Zlog
           obj = format_obj(event.data[1..-1])
           msg = pattern % obj
           # determine the length of the last message
-          len = (@has_last_line_newline) ? 0 : @last.length
+          len = (@has_last_line_newline == false) ? @last.length : 0
           # calculate the amount of white spaces we need to overwrite
           # remnants of the last log message
           rem_len = len - msg.length
@@ -73,11 +74,11 @@ module Zlog
           # check if we need to add a newline at the start of the line
           # this only happens when the last message was a continuous message
           # and thus didn't set a \n at the end
-          sl = if (@has_last_line_newline); ""
-               else
-                 @has_last_line_newline = true
-                 "\n"
-               end
+          sl =
+            if (@has_last_line_newline == false)
+              @has_last_line_newline = true
+              "\n"
+            else "" end
           # return the resulting pattern
           sl + (pattern % obj ) + "\n"
         end
