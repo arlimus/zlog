@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-gemspec
+gem 'logging'
 
 group :test do
   gem 'rake'
