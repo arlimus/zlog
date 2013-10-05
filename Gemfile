@@ -3,5 +3,6 @@ gem 'logging'
 
 group :test do
   gem 'rake'
+  gem 'minitest'
   gem 'turn'
 end
