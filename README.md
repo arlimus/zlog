@@ -1,4 +1,6 @@
 # zlog
+[![Gem Version](https://badge.fury.io/rb/zlog.png)](http://badge.fury.io/rb/zlog)
+[![Build Status](https://travis-ci.org/arlimus/zlog.png)](https://travis-ci.org/arlimus/zlog)
 
 Logging configuration on top of ruby's `logging` gem (see [github](https://github.com/TwP/logging)).
 
