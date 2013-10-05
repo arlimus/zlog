@@ -10,7 +10,6 @@ Logging configuration on top of ruby's `logging` gem (see [github](https://githu
 
 * gems:
   * logging
-  * highline
 
 # installation
 

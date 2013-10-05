@@ -1,4 +1,3 @@
-require 'highline'
 require 'logging'
 
 # custom log level

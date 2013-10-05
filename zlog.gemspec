@@ -13,7 +13,6 @@ spec = Gem::Specification.new do |s|
   s.licenses = ["MPLv2"]
   s.homepage = "https://github.com/arlimus/zlog"
 
-  s.add_dependency 'highline'
   s.add_dependency 'logging'
 
   s.files = `git ls-files`.split("\n")
