@@ -15,6 +15,12 @@ Logging configuration on top of ruby's `logging` gem (see [github](https://githu
 
 # installation
 
+From rubygems:
+
+    gem install zlog
+
+From source:
+
     gem build *.gemspec && gem install *gem
 
 # example
