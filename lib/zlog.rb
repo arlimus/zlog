@@ -29,77 +29,55 @@ module Zlog
     Logging.logger.root.level = opts[:loglevel] if not opts[:loglevel].nil?
   end
 
-  module Layouts
-    # Accessor / Factory for Simple layout
-    def self.simple( *args )
-      ::Zlog::Layouts::Simple.new(*args)
-    end
-
-    def self.named( *args )
-      ::Zlog::Layouts::SimpleNamed.new(*args)
-    end
-
-    # Simple layout for easy readability
-    class Simple < ::Logging::Layout
-
-      # format log events
-      def format( event )
-        # Logging::LogEvent logger="zlog", level=2, data="warn me", time=2013-09-29 23:36:12 +0200, file="", line="", method=""
-        level = LOGLEVEL2NAME[event.level]
-        pattern = STDOUT_PATTERN_256COLORS[level]
-        # handle continuous logging lines
-        if (event.data.start_with? "\r")
-          # this is a continuous message
-          # there are 2 cases which need to be covered:
-          # A: the last line was a regular log line,
-          #    the cursor caret is at position 0
-          # B: the last line was a continuous log line,
-          #    the cursor caret is at the end of the last message
-          # For case B we want to go back to the beginning of the line (via "\r")
-          # then insert the message and the amount of white space needed to
-          # overwrite any visible characters from the last message
-          obj = format_obj(event.data[1..-1])
-          msg = pattern % obj
-          # determine the length of the last message
-          len = (@has_last_line_newline == false) ? @last.length : 0
-          # calculate the amount of white spaces we need to overwrite
-          # remnants of the last log message
-          rem_len = len - msg.length
-          rem_len = 0 if rem_len < 0
-          # create the resulting string
-          ret = "\r" + msg + (' '*rem_len)
-          # make sure to update state parameters
-          @last = msg
-          @has_last_line_newline = false
-          # return the result
-          ret
-        else
-          # format the object
-          obj = format_obj(event.data)
-          # check if we need to add a newline at the start of the line
-          # this only happens when the last message was a continuous message
-          # and thus didn't set a \n at the end
-          sl =
-            if (@has_last_line_newline == false)
-              @has_last_line_newline = true
-              "\n"
-            else "" end
-          # return the resulting pattern
-          sl + (pattern % obj ) + "\n"
-        end
+  def self.format_simple log_event, print_name = false
+    # Logging::LogEvent logger="zlog", level=2, data="warn me", time=2013-09-29 23:36:12 +0200, file="", line="", method=""
+    level = LOGLEVEL2NAME[event.level]
+    pattern = STDOUT_PATTERN_256COLORS[level]
+    # get the core message
+    msg =
+      if print_name
+        (pattern[:name] % event.logger) + ( pattern % obj )
+      else
+        pattern % obj
       end
-    end
-
-    # Simple layout for easy readability
-    class SimpleNamed < ::Logging::Layout
-      # format log events
-      def format( event )
-        # Logging::LogEvent logger="zlog", level=2, data="warn me", time=2013-09-29 23:36:12 +0200, file="", line="", method=""
-        level = LOGLEVEL2NAME[event.level]
-        pattern = STDOUT_PATTERN_256COLORS[level]
-        obj = format_obj(event.data)
-        ( STDOUT_PATTERN_256COLORS[:name] % event.logger ) + ( pattern % obj ) + "\n"
-      end
+    # handle continuous logging lines
+    if (event.data.start_with? "\r")
+      # this is a continuous message
+      # there are 2 cases which need to be covered:
+      # A: the last line was a regular log line,
+      #    the cursor caret is at position 0
+      # B: the last line was a continuous log line,
+      #    the cursor caret is at the end of the last message
+      # For case B we want to go back to the beginning of the line (via "\r")
+      # then insert the message and the amount of white space needed to
+      # overwrite any visible characters from the last message
+      obj = format_obj(event.data[1..-1])
+      # determine the length of the last message
+      len = (@has_last_line_newline == false) ? @last.length : 0
+      # calculate the amount of white spaces we need to overwrite
+      # remnants of the last log message
+      rem_len = len - msg.length
+      rem_len = 0 if rem_len < 0
+      # create the resulting string
+      ret = "\r" + msg + (' '*rem_len)
+      # make sure to update state parameters
+      @last = msg
+      @has_last_line_newline = false
+      # return the result
+      ret
+    else
+      # format the object
+      obj = format_obj(event.data)
+      # check if we need to add a newline at the start of the line
+      # this only happens when the last message was a continuous message
+      # and thus didn't set a \n at the end
+      sl =
+        if (@has_last_line_newline == false)
+          @has_last_line_newline = true
+          "\n"
+        else "" end
+      # return the resulting pattern
+      sl + msg + "\n"
     end
   end
 
@@ -140,4 +118,31 @@ module Zlog
     :name    => "\033[38;5;246m%s: "
   }
 
+end
+
+module Zlog::Layouts
+  # Accessor / Factory for Simple layout
+  def self.simple( *args )
+    ::Zlog::Layouts::Simple.new(*args)
+  end
+
+  def self.named( *args )
+    ::Zlog::Layouts::SimpleNamed.new(*args)
+  end
+
+  # Simple layout for easy readability
+  class Simple < ::Logging::Layout
+    # format log events
+    def format( event )
+      Zlog::format_simple event, false
+    end
+  end
+
+  # Simple layout for easy readability
+  class SimpleNamed < ::Logging::Layout
+    # format log events
+    def format( event )
+      Zlog::format_simple event, true
+    end
+  end
 end
