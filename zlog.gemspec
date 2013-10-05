@@ -13,7 +13,7 @@ spec = Gem::Specification.new do |s|
   s.licenses = ["MPLv2"]
   s.homepage = "https://github.com/arlimus/zlog"
 
-  s.add_dependency 'logging'
+  s.add_dependency 'logging', '~> 1.8.1'
 
   s.files = `git ls-files`.split("\n")
   s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
