@@ -1,3 +1,7 @@
+## 0.5
+
+* improvement: added test suite with rake, minitest, spec, turn and travis
+
 ## 0.4
 
 * feature: added abort( message, exit_code ) to call a fatal log message and exit
