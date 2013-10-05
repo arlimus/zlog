@@ -28,18 +28,25 @@ module Zlog
       )
     Logging.logger.root.level = opts[:loglevel] if not opts[:loglevel].nil?
   end
+end
 
-  def self.format_simple log_event, print_name = false
+module Zlog::Layouts
+end
+
+module Zlog::Layouts::SimpleCore
+  def format_simple event, print_name = false, pallette = STDOUT_PATTERN_256COLORS
     # Logging::LogEvent logger="zlog", level=2, data="warn me", time=2013-09-29 23:36:12 +0200, file="", line="", method=""
     level = LOGLEVEL2NAME[event.level]
-    pattern = STDOUT_PATTERN_256COLORS[level]
+    pattern = pallette[level]
     # get the core message
-    msg =
-      if print_name
-        (pattern[:name] % event.logger) + ( pattern % obj )
-      else
-        pattern % obj
-      end
+    mkmsg = lambda{ |data|
+        obj = format_obj(data)
+        if print_name
+          (pallette[:name] % event.logger) + ( pattern % obj )
+        else
+          pattern % obj
+        end
+      }
     # handle continuous logging lines
     if (event.data.start_with? "\r")
       # this is a continuous message
@@ -51,7 +58,7 @@ module Zlog
       # For case B we want to go back to the beginning of the line (via "\r")
       # then insert the message and the amount of white space needed to
       # overwrite any visible characters from the last message
-      obj = format_obj(event.data[1..-1])
+      msg = mkmsg.(event.data[1..-1])
       # determine the length of the last message
       len = (@has_last_line_newline == false) ? @last.length : 0
       # calculate the amount of white spaces we need to overwrite
@@ -67,7 +74,7 @@ module Zlog
       ret
     else
       # format the object
-      obj = format_obj(event.data)
+      msg = mkmsg.(event.data)
       # check if we need to add a newline at the start of the line
       # this only happens when the last message was a continuous message
       # and thus didn't set a \n at the end
@@ -117,7 +124,6 @@ module Zlog
     :section => "\n\033[38;5;33m== %s\033[0m",
     :name    => "\033[38;5;246m%s: "
   }
-
 end
 
 module Zlog::Layouts
@@ -132,17 +138,19 @@ module Zlog::Layouts
 
   # Simple layout for easy readability
   class Simple < ::Logging::Layout
+    include Zlog::Layouts::SimpleCore
     # format log events
     def format( event )
-      Zlog::format_simple event, false
+      format_simple event, false
     end
   end
 
   # Simple layout for easy readability
   class SimpleNamed < ::Logging::Layout
+    include Zlog::Layouts::SimpleCore
     # format log events
     def format( event )
-      Zlog::format_simple event, true
+      format_simple event, true
     end
   end
 end
