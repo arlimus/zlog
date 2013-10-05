@@ -12,6 +12,7 @@ spec = Gem::Specification.new do |s|
   s.email = "dominik.richter@googlemail.com"
   s.licenses = ["MPLv2"]
   s.homepage = "https://github.com/arlimus/zlog"
+  s.required_ruby_version = '>= 1.9.3'
 
   s.add_dependency 'logging', '~> 1.8.1'
 
