@@ -1,3 +1,8 @@
+## 0.6
+
+* improvement: fixed versions of gem file dependencies
+* bugfix: deprecated ruby 1.9.2
+
 ## 0.5
 
 * improvement: added test suite with rake, minitest, spec, turn and travis
