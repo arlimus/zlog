@@ -56,16 +56,16 @@ module Zlog::Layouts::SimpleCore
 
   # standard order: ["DEBUG", "INFO", "WARN", "ERROR", "FATAL"]
 
-  LOGLEVEL2NAME = [:debug, :info, :warning, :error, :fatal, :ok, :section]
+  LOGLEVEL2NAME = [:debug, :info, :warning, :ok, :section, :error, :fatal]
 
   STDOUT_PATTERN_NOCOLORS = {
     :debug    => ".. %s",
     :info     => "-- %s",
     :warning  => "ww %s",
-    :error    => "ee %s",
-    :fatal    => "ff %s",
     :ok       => "++ %s",
     :section  => "\n== %s",
+    :error    => "ee %s",
+    :fatal    => "ff %s",
     :name     => "%s: "
   }
 
@@ -73,10 +73,10 @@ module Zlog::Layouts::SimpleCore
     :debug   => "\033[37m.. %s\033[0m",
     :info    => "\033[0m-- %s\033[0m",
     :warning => "\033[1;33mww %s\033[0m",
-    :error   => "\033[1;31mee %s\033[0m",
-    :fatal   => "\033[1;41mff\033[0m\033[1;31 %s\033[0m",
     :ok      => "\033[1;32m++ %s\033[0m",
     :section => "\n\033[1;34m== %s\033[0m",
+    :error   => "\033[1;31mee %s\033[0m",
+    :fatal   => "\033[1;41mff\033[0m\033[1;31 %s\033[0m",
     :name    => "\033[37m%s: "
   }
 
@@ -84,10 +84,10 @@ module Zlog::Layouts::SimpleCore
     :debug   => "\033[38;5;246m.. %s\033[0m",
     :info    => "\033[38;5;255m-- %s\033[0m",
     :warning => "\033[38;5;226mww %s\033[0m",
-    :error   => "\033[38;5;196mee %s\033[0m",
-    :fatal   => "\033[48;5;196mff\033[0m\033[38;5;196m %s\033[0m",
     :ok      => "\033[38;5;46m++ %s\033[0m",
     :section => "\n\033[38;5;33m== %s\033[0m",
+    :error   => "\033[38;5;196mee %s\033[0m",
+    :fatal   => "\033[48;5;196mff\033[0m\033[38;5;196m %s\033[0m",
     :name    => "\033[38;5;246m%s: "
   }
 end
