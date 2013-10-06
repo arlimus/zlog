@@ -12,7 +12,5 @@ module Zlog
     as = Logging.logger.root.appenders.find_all{|i| i.name != "stdout" }
     # add back all appenders + our own stdout appender
     Logging.logger.root.appenders = as + ["stdout"]
-    # finally set the log level if we have one configured
-    Logging.logger.root.level = opts[:loglevel] if not opts[:loglevel].nil?
   end
 end
