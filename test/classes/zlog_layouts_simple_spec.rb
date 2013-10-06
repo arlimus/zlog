@@ -34,20 +34,20 @@ describe Zlog::Layouts::Simple do
     format(2).must_equal (pattern_for :warning) + "\n"
   end
 
-  it "must add error events" do
-    format(3).must_equal (pattern_for :error) + "\n"
-  end
-
-  it "must add fatal events" do
-    format(4).must_equal (pattern_for :fatal) + "\n"
-  end
-
   it "must add ok events" do
-    format(5).must_equal (pattern_for :ok) + "\n"
+    format(3).must_equal (pattern_for :ok) + "\n"
   end
 
   it "must add section events" do
-    format(6).must_equal (pattern_for :section) + "\n"
+    format(4).must_equal (pattern_for :section) + "\n"
+  end
+
+  it "must add error events" do
+    format(5).must_equal (pattern_for :error) + "\n"
+  end
+
+  it "must add fatal events" do
+    format(6).must_equal (pattern_for :fatal) + "\n"
   end
 
   it "must support continuous loggin, 1 step" do
