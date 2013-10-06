@@ -1,3 +1,9 @@
+## 0.7
+
+* improvement: correctly ordered log levels (now: ... warn ok section error ...)
+* bugfix: don't set root log level when initializing stdout logger; make sure logging to other appenders is not affected here
+* bugfix: prevent duplicate entries of stdout appender + prevent removal of other appenders when initializing zlog stdout
+
 ## 0.6
 
 * improvement: fixed versions of gem file dependencies

@@ -1,5 +1,5 @@
 module Zlog
-  VERSION = "0.6"
+  VERSION = "0.7"
 
   def self.init_stdout opts = {named: false, loglevel: nil}
     # configure the default stdout appender
