@@ -35,7 +35,11 @@ if STDIN.tty?
     puts opt
     exit 0
   end
-
+  # verify that the file exists
+  if not File::file? options[:file]
+    Log.abort "file '#{options[:file]}' doesn't exist"
+  end
+  # read lines from file and format them
   File::readlines( options[:file] ).each do |line|
     print_out.( cli.convert_line line )
   end
