@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+require 'zlog'
+
+if STDIN.tty?
+  puts "usage: cat file.log | zlog"
+else
+  STDIN.readlines.each do |line|
+    p "i got #{line}"
+    p Zlog::json_2_event(line)
+  end
+end
