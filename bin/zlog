@@ -1,11 +1,34 @@
 #!/usr/bin/env ruby
 require 'zlog'
 
+module Zlog::CLI
+  extend self
+  LayoutSimple = Zlog::Layouts.simple
+  LayoutSimpleNamed = Zlog::Layouts.named
+
+  def convert_stdin opts = {}, &handler
+    # collect all results to an array which will be returned
+    # in case that no block is given for processing
+    res = []
+    handler = lambda{|line| res.push line} if not block_given?
+
+    # process each line
+    STDIN.readlines.each do |line|
+      e = Zlog::json_2_event(line)
+      if not e.nil?
+        handler.(LayoutSimple.format(e))
+      end
+    end
+
+    # return the result, in case we have any
+    res
+  end
+end
+
 if STDIN.tty?
   puts "usage: cat file.log | zlog"
 else
-  STDIN.readlines.each do |line|
-    p "i got #{line}"
-    p Zlog::json_2_event(line)
+  Zlog::CLI.convert_stdin do |line|
+    puts line
   end
 end
