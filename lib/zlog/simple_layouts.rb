@@ -90,6 +90,17 @@ module Zlog::Layouts::SimpleCore
     :fatal   => "\033[48;5;196mff\033[0m\033[38;5;196m %s\033[0m",
     :name    => "\033[38;5;246m%s: "
   }
+
+  STDOUT_SYMBOLIC_PATTERN_256COLORS = {
+    :debug   => "\033[38;5;246m. %s\033[0m",
+    :info    => "\033[38;5;255m━ %s\033[0m",
+    :warning => "\033[38;5;226m! %s\033[0m",
+    :ok      => "\033[38;5;46m✔ %s\033[0m",
+    :section => "\n\033[38;5;33m= %s\033[0m",
+    :error   => "\033[38;5;196m✘ %s\033[0m",
+    :fatal   => "\033[48;5;196m✘\033[0m\033[38;5;196m %s\033[0m",
+    :name    => "\033[38;5;246m%s: "
+  }
 end
 
 module Zlog::Layouts
@@ -100,6 +111,10 @@ module Zlog::Layouts
 
   def self.named( *args )
     ::Zlog::Layouts::SimpleNamed.new(*args)
+  end
+
+  def self.symbolic( *args )
+    ::Zlog::Layouts::SimpleSymbolic.new(*args)
   end
 
   # Simple layout for easy readability
@@ -117,6 +132,15 @@ module Zlog::Layouts
     # format log events
     def format( event )
       format_simple event, true
+    end
+  end
+
+  # Simple layout for easy readability
+  class SimpleSymbolic < ::Logging::Layout
+    include Zlog::Layouts::SimpleCore
+    # format log events
+    def format( event )
+      format_simple event, false, Zlog::Layouts::SimpleCore::STDOUT_SYMBOLIC_PATTERN_256COLORS
     end
   end
 end

@@ -9,6 +9,8 @@ module Zlog
     layout = case opts[:layout]
       when :named
         Zlog::Layouts.named
+      when :symbolic
+        Zlog::Layouts.symbolic
       else
         Zlog::Layouts.simple
       end
