@@ -1,10 +1,40 @@
 #!/usr/bin/env ruby
 require 'zlog'
+require 'optparse'
 
-module Zlog::CLI
-  extend self
-  LayoutSimple = Zlog::Layouts.simple
-  LayoutSimpleNamed = Zlog::Layouts.named
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "usage: zlog [options]\n       cat my.log | zlog [options]"
+
+  opts.on("-f", "--file FILE", "Read log from file") do |file|
+    options[:file] = file
+  end
+
+  opts.on("-s", "--simple", "Print simple layout") do |v|
+    options[:format] = :simple
+  end
+
+  opts.on("-n", "--named", "Print simple layout with names") do |v|
+    options[:format] = :named
+  end
+end.parse!
+
+class Zlog::CLI
+  def initialize opts = {}
+    @layout = case opts[:format]
+      when :named
+        Zlog::Layouts.named
+      else
+        Zlog::Layouts.simple
+      end
+  end
+
+  def convert_line line, opts = {}
+    e = Zlog::json_2_event(line)
+    if not e.nil?
+      @layout.format(e)
+    end
+  end
 
   def convert_stdin opts = {}, &handler
     # collect all results to an array which will be returned
@@ -14,10 +44,7 @@ module Zlog::CLI
 
     # process each line
     STDIN.readlines.each do |line|
-      e = Zlog::json_2_event(line)
-      if not e.nil?
-        handler.(LayoutSimple.format(e))
-      end
+      handler.( convert_line line, opts )
     end
 
     # return the result, in case we have any
@@ -25,10 +52,13 @@ module Zlog::CLI
   end
 end
 
+cli = Zlog::CLI.new options
+print_out = lambda{ |line| puts line }
+
 if STDIN.tty?
-  puts "usage: cat file.log | zlog"
-else
-  Zlog::CLI.convert_stdin do |line|
-    puts line
+  File::readlines( options[:file] ).each do |line|
+    print_out.( cli.convert_line line )
   end
+else
+  cli.convert_stdin &print_out
 end
