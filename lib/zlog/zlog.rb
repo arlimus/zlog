@@ -1,3 +1,5 @@
+require 'json'
+
 module Zlog
   VERSION = "0.7"
   extend self
@@ -38,6 +40,20 @@ module Zlog
     else
       # return the found good filename
       ret
+    end
+  end
+
+  def json_2_event str
+    begin
+      j = JSON::load str
+      # LogEvent = Struct.new( :logger, :level, :data, :time, :file, :line, :method )
+      # from: https://github.com/TwP/logging/blob/master/lib/logging/log_event.rb
+      # json example:
+      # {"timestamp":"2013-10-10T18:37:38.513438+02:00","level":"DEBUG",
+      #  "logger":"Log1-debug","message":"debugging info, this won't show up on console"}
+      Logging::LogEvent.new( j['logger'], Logging.level_num(j['level']), j['message'], j['timestamp'] )
+    rescue
+      nil
     end
   end
 end

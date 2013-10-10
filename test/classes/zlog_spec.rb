@@ -30,4 +30,34 @@ describe Zlog do
     end
 
   end
+
+  describe 'json_2_event' do
+    before :each do
+      template = '{"timestamp":"2013-10-10T18:37:38.513438+02:00","level":"%level","logger":"Mocker%level","message":"mock message %level"}'
+      names = ["DEBUG","INFO","WARN","OK","SECTION","ERROR","FATAL"]
+      @examples = (0..(names.length-1)).
+        map do |level|
+          {
+            raw: template.gsub( '%level', names[level] ),
+            level: level,
+            name: names[level]
+          }
+        end
+    end
+
+    it "must give nil on incorrect json" do
+      Zlog.json_2_event( "" ).must_be_nil
+    end
+
+    it "must convert a logging json to a logevent" do
+      @examples.each do |e|
+        r = Zlog.json_2_event e[:raw]
+        r.must_be_instance_of Logging::LogEvent
+        r.level.must_equal e[:level]
+        r.logger.must_equal "Mocker#{e[:name]}"
+        r.data.must_equal "mock message #{e[:name]}"
+      end
+    end
+
+  end
 end
