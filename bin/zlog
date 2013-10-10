@@ -2,8 +2,11 @@
 require 'zlog/cli'
 require 'optparse'
 
+Zlog.init_stdout
+Log = Logging.logger['zlog']
+
 options = {}
-OptionParser.new do |opts|
+opt = OptionParser.new do |opts|
   opts.banner = "usage: zlog [options]\n       cat my.log | zlog [options]"
 
   opts.on("-f", "--file FILE", "Read log from file") do |file|
@@ -17,12 +20,22 @@ OptionParser.new do |opts|
   opts.on("-n", "--named", "Print simple layout with names") do |v|
     options[:format] = :named
   end
-end.parse!
+end
+opt.parse!
 
 cli = Zlog::CLI.new options
 print_out = lambda{ |line| puts line }
 
+# if we are part of a pipe (eg: cat file.log | zlog), read input from stdin
+# otherwise just try to read from the provided file parameter
 if STDIN.tty?
+  # check if we have a file parameter provided
+  if options[:file].nil?
+    Log.error "you must provide at least a file parameter"
+    puts opt
+    exit 0
+  end
+
   File::readlines( options[:file] ).each do |line|
     print_out.( cli.convert_line line )
   end

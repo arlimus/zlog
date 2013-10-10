@@ -4,11 +4,19 @@ module Zlog
   VERSION = "0.7"
   extend self
 
-  def init_stdout opts = {named: false, loglevel: nil}
+  def init_stdout opts = {layout: :simple, loglevel: nil}
+    # determine the layout from options
+    layout = case opts[:layout]
+      when :named
+        Zlog::Layouts.named
+      else
+        Zlog::Layouts.simple
+      end
+
     # configure the default stdout appender
     Logging.appenders.stdout(
       level: opts[:loglevel],
-      layout: (opts[:named]) ? Zlog::Layouts.named : Zlog::Layouts.simple
+      layout: layout
     )
     # find all non-stdout appenders
     # this prevents duplicates of stdout appender
