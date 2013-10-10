@@ -1,3 +1,9 @@
+## 0.8
+
+* feature: support reading log files for zlog formatter
+* feature: added convertor from json (log file format) to logevent in zlog
+* feature: get a writable logfile from a list of candidates or generate a random one
+
 ## 0.7
 
 * improvement: correctly ordered log levels (now: ... warn ok section error ...)

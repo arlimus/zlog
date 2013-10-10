@@ -1,7 +1,7 @@
 require 'json'
 
 module Zlog
-  VERSION = "0.7"
+  VERSION = "0.8"
   extend self
 
   def init_stdout opts = {layout: :simple, loglevel: nil}
