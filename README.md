@@ -8,12 +8,12 @@ Logging configuration on top of ruby's `logging` gem (see [github](https://githu
 * supports continuous logging (eg progress indicators which you don't want to clutter your commandline)
 * added section and ok log types
 
-# requirements
+## requirements
 
 * gems:
   * logging
 
-# installation
+## installation
 
 From rubygems:
 
@@ -23,7 +23,7 @@ From source:
 
     gem build *.gemspec && gem install *gem
 
-# example
+## example
 
 Code:
 
@@ -41,5 +41,13 @@ Code:
 
 
 See the `example` folder for more.
+
+## utility
+
+You can use `zlog` to read and format json-based log files:
+
+    cat file.log | zlog
+
+It will print out a formatted representation of the log.
 
 ![Example image in example/example.output.png](https://raw.github.com/arlimus/zlog/master/example/example.output.png)
