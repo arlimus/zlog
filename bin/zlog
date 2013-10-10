@@ -5,6 +5,7 @@ require 'optparse'
 Zlog.init_stdout
 Log = Logging.logger['zlog']
 
+# Define the options for commandline interaction
 options = {}
 opt = OptionParser.new do |opts|
   opts.banner = "usage: zlog [options]\n       cat my.log | zlog [options]"
@@ -23,7 +24,10 @@ opt = OptionParser.new do |opts|
 end
 opt.parse!
 
+# create the commandline object for zlog
 cli = Zlog::CLI.new options
+
+# tiny print helper for reuse
 print_out = lambda{ |line| puts line }
 
 # if we are part of a pipe (eg: cat file.log | zlog), read input from stdin
