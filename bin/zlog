@@ -15,11 +15,11 @@ opt = OptionParser.new do |opts|
   end
 
   opts.on("-s", "--simple", "Print simple layout") do |v|
-    options[:format] = :simple
+    options[:layout] = :simple
   end
 
   opts.on("-n", "--named", "Print simple layout with names") do |v|
-    options[:format] = :named
+    options[:layout] = :named
   end
 end
 opt.parse!

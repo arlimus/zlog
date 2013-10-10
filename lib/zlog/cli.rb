@@ -2,7 +2,7 @@ require 'zlog'
 
 class Zlog::CLI
   def initialize opts = {}
-    @layout = case opts[:format]
+    @layout = case opts[:layout]
       when :named
         Zlog::Layouts.named
       else
