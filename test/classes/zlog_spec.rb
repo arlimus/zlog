@@ -1,5 +1,4 @@
 require 'minitest_helper'
-require 'tmpdir'
 
 describe Zlog do
   it "can initialize itself to STDOUT" do

@@ -1,4 +1,5 @@
 require 'json'
+require 'tmpdir'
 
 module Zlog
   VERSION = "0.8"
