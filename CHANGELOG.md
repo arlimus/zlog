@@ -1,3 +1,7 @@
+## 0.9.0
+
+* bugfix: allow continuous readinf from stdin, without waiting for eof
+
 ## 0.8
 
 * feature: support reading log files for zlog formatter
