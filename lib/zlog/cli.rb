@@ -24,7 +24,7 @@ class Zlog::CLI
     handler = lambda{|line| res.push line} if not block_given?
 
     # process each line
-    STDIN.readlines.each do |line|
+    while line = STDIN.gets do
       handler.( convert_line line, opts )
     end
 
