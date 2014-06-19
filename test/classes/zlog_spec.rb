@@ -51,10 +51,12 @@ describe Zlog do
     it "must convert a logging json to a logevent" do
       @examples.each do |e|
         r = Zlog.json_2_event e[:raw]
-        r.must_be_instance_of Logging::LogEvent
-        r.level.must_equal e[:level]
-        r.logger.must_equal "Mocker#{e[:name]}"
-        r.data.must_equal "mock message #{e[:name]}"
+        r.must_be_instance_of Array
+
+        r[0].must_be_instance_of Logging::LogEvent
+        r[0].level.must_equal e[:level]
+        r[0].logger.must_equal "Mocker#{e[:name]}"
+        r[0].data.must_equal "mock message #{e[:name]}"
       end
     end
 
