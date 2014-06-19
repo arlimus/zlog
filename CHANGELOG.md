@@ -1,3 +1,7 @@
+## 0.9.1
+
+* bugfix: handle multiple log messages in json
+
 ## 0.9.0
 
 * bugfix: allow continuous readinf from stdin, without waiting for eof

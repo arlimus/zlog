@@ -2,7 +2,7 @@ require 'json'
 require 'tmpdir'
 
 module Zlog
-  VERSION = "0.9.0"
+  VERSION = "0.9.1"
   extend self
 
   def init_stdout opts = {layout: :simple, loglevel: nil}
