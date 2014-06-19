@@ -11,7 +11,8 @@ class Zlog::CLI
   end
 
   def convert_line line, opts = {}
-    Zlog::json_2_event(line).each do |e|
+    e = Zlog::json_2_event(line)
+    if not e.nil?
       @layout.format(e)
     end
   end

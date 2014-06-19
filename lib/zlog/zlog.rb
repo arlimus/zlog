@@ -60,9 +60,7 @@ module Zlog
       # json example:
       # {"timestamp":"2013-10-10T18:37:38.513438+02:00","level":"DEBUG",
       #  "logger":"Log1-debug","message":"debugging info, this won't show up on console"}
-      Array(j['message']).map do |msg|
-        Logging::LogEvent.new( j['logger'], Logging.level_num(j['level']), msg, j['timestamp'] )
-      end
+      Logging::LogEvent.new( j['logger'], Logging.level_num(j['level']), j['message'].to_s, j['timestamp'] )
     rescue
       nil
     end
