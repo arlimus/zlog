@@ -1,3 +1,7 @@
+## 0.9.2
+
+* bugfix: corrected handling of jsony-messages in cli tool
+
 ## 0.9.1
 
 * bugfix: handle multiple log messages in json
